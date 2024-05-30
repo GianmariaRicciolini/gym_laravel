@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ session('theme', 'light') }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $theme }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,32 +26,5 @@
                 {{ $slot }}
             </div>
         </div>
-        <script>
-            // Check stored theme preference and apply
-            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-    
-            // Function to toggle theme
-            function toggleTheme() {
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                    document.querySelector('.bi-brightness-high').classList.add('hidden');
-                    document.querySelector('.bi-brightness-high').classList.remove('inline-block');
-                    document.querySelector('.bi-moon-fill').classList.add('inline-block');
-                    document.querySelector('.bi-moon-fill').classList.remove('hidden');
-                } else {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                    document.querySelector('.bi-brightness-high').classList.add('inline-block');
-                    document.querySelector('.bi-brightness-high').classList.remove('hidden');
-                    document.querySelector('.bi-moon-fill').classList.add('hidden');
-                    document.querySelector('.bi-moon-fill').classList.remove('inline-block');
-                }
-            }
-        </script>
     </body>
 </html>

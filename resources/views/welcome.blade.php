@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ session('theme', 'light') }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $theme }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,38 +22,13 @@
             <div class="py-5">
                 <a href="{{ route('register') }}" class="btn btn-danger btn-lg me-2">Register Now</a>
                 <a href="{{ route('login') }}" class="btn btn-outline-danger btn-lg">Log in</a>
+                <!-- Theme toggle button -->
+                <a href="{{ route('theme.toggle') }}" class="btn btn-secondary btn-lg ms-2">Toggle Theme</a>
             </div>
         </div>
     </div>
 
     <!-- Bootstrap JS and Popper.js -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Apply the stored theme preference on load
-            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-
-            function toggleTheme() {
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                } else {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                }
-            }
-
-            // Add event listener to the theme toggle button
-            const themeToggleButton = document.querySelector('button[onclick="toggleTheme()"]');
-            if (themeToggleButton) {
-                themeToggleButton.addEventListener('click', toggleTheme);
-            }
-        });
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
-

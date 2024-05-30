@@ -3,7 +3,10 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ThemeController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/toggle-theme', [ThemeController::class, 'toggleTheme'])->name('theme.toggle');
 
 Route::get('/', function () {
     return view('welcome');
