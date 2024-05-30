@@ -8,33 +8,31 @@
 @endphp
 
 <div class="calendar">
-    <div class="calendar-header flex justify-between">
+    <div class="calendar-header d-flex justify-content-between mb-4">
         <a href="{{ route('dashboard', ['date' => $date->copy()->subMonth()->format('Y-m')]) }}" class="btn btn-secondary">Previous</a>
-        <span class="text-lg font-semibold">{{ $date->format('F Y') }}</span>
+        <span class="h4">{{ $date->format('F Y') }}</span>
         <a href="{{ route('dashboard', ['date' => $date->copy()->addMonth()->format('Y-m')]) }}" class="btn btn-secondary">Next</a>
     </div>
-    <div class="grid grid-cols-7 mt-4">
-        @foreach(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
-            <div class="text-center font-semibold">{{ $day }}</div>
-        @endforeach
-    </div>
-    <div class="grid grid-cols-7 border-t border-gray-200">
+    <div class="d-flex flex-wrap border-top border-gray-200">
         @while ($currentDate->lte($endOfWeek))
             @for ($i = 0; $i < 7; $i++)
-                <div class="border-r border-b border-gray-200 p-2 {{ $currentDate->month != $date->month ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
-                    <div class="text-right">
-                        <a href="{{ route('courses.index', ['date' => $currentDate->format('Y-m-d')]) }}" class="{{ $currentDate->isToday() ? 'text-red-500' : '' }}">
+                <div class="border border-gray-200 p-2 d-flex flex-column justify-content-between {{ $currentDate->month != $date->month ? 'bg-gray-200 dark:bg-gray-700' : 'bg-transparent' }}" style="width: calc(100% / 7); height: 100px;">
+                    <div class="d-flex justify-content-between">
+                        <span class="font-weight-bold">{{ $currentDate->format('D') }}</span>
+                        <a href="{{ route('courses.index', ['date' => $currentDate->format('Y-m-d')]) }}" class="{{ $currentDate->isToday() ? 'text-danger' : '' }}">
                             {{ $currentDate->day }}
                         </a>
                     </div>
                     @php
                         $courses = \App\Models\Course::whereDate('date', $currentDate->format('Y-m-d'))->get();
                     @endphp
-                    @foreach ($courses as $course)
-                        <div>
-                            <a href="{{ route('courses.show', $course->id) }}">{{ $course->name }}</a>
-                        </div>
-                    @endforeach
+                    <div>
+                        @foreach ($courses as $course)
+                            <div>
+                                <a href="{{ route('courses.show', $course->id) }}">{{ $course->name }}</a>
+                            </div>
+                        @endforeach
+                    </div>
                     @php
                         $currentDate->addDay();
                     @endphp
@@ -43,3 +41,4 @@
         @endwhile
     </div>
 </div>
+
