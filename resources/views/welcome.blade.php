@@ -22,8 +22,6 @@
             <div class="py-5">
                 <a href="{{ route('register') }}" class="btn btn-danger btn-lg me-2">Register Now</a>
                 <a href="{{ route('login') }}" class="btn btn-outline-danger btn-lg">Log in</a>
-                <!-- Theme toggle button -->
-                <a href="{{ route('theme.toggle') }}" class="btn btn-secondary btn-lg ms-2">Toggle Theme</a>
             </div>
         </div>
     </div>

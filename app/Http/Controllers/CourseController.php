@@ -7,11 +7,20 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::all();
+        $query = Course::query();
+
+        if ($request->has('date')) 
+        {
+            $query->where('date', $request->input('date'));
+        }
+
+        $courses = $query->get();
+
         return view('courses.index', compact('courses'));
     }
+
 
     public function create()
     {
@@ -23,8 +32,9 @@ class CourseController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date',
+            'date' => 'required|date',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i',
             'max_participants' => 'required|integer',
         ]);
 
@@ -32,6 +42,7 @@ class CourseController extends Controller
 
         return redirect()->route('courses.index')->with('success', 'Course created successfully!');
     }
+
 
     public function show(Course $course)
     {
@@ -48,8 +59,9 @@ class CourseController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date',
+            'date' => 'required|date',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i',
             'max_participants' => 'required|integer',
         ]);
 

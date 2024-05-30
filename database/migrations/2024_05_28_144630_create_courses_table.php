@@ -14,9 +14,10 @@ return new class extends Migration
     Schema::create('courses', function (Blueprint $table) {
         $table->id();
         $table->string('name');
-        $table->text('description')->nullable();
-        $table->dateTime('start_time');
-        $table->dateTime('end_time');
+        $table->text('description');
+        $table->date('date');
+        $table->time('start_time');
+        $table->time('end_time');  
         $table->integer('max_participants');
         $table->timestamps();
     });

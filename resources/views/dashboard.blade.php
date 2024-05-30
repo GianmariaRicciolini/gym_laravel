@@ -12,6 +12,9 @@
                     {{ __("You're logged in!") }}
                 </div>
             </div>
+            <div class="mt-8">
+                @include('calendar')
+            </div>
         </div>
     </div>
 </x-app-layout>

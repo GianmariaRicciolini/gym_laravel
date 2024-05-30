@@ -13,6 +13,7 @@ class Course extends Model
     protected $fillable = [
         'name',
         'description',
+        'date',
         'start_time',
         'end_time',
         'max_participants',
@@ -26,3 +27,4 @@ class Course extends Model
         return $this->belongsToMany(User::class);
     }
 }
+
