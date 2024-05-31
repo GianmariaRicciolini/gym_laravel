@@ -17,29 +17,29 @@
     <!-- Precompiled Scripts and Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased bg-gray-100 dark:bg-gray-900 dark:text-white">
-    <div class="min-h-screen">
+<body class="font-sans antialiased bg-gray-100 dark:bg-gray-900 dark:text-white d-flex flex-column min-vh-100">
+    <div class="flex-grow-1">
         @include('layouts.navigation')
 
         <main>
-            <div class="py-4">
-                <div class="container">
-                    @if (session('success'))
-                        <div class="alert alert-success mb-4">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-    
-                    @if (session('error'))
-                        <div class="alert alert-danger mb-4">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                </div>
+            <div class="container py-4">
+                @if (session('success'))
+                    <div class="alert alert-success mb-4">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger mb-4">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
                 {{ $slot }}
             </div>
         </main>
     </div>
+    
+    @include('layouts.footer')
 </body>
 </html>
