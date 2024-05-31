@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Course;
+use App\Models\User;
 use Faker\Factory as Faker;
 
 class CourseSeeder extends Seeder
@@ -24,7 +25,8 @@ class CourseSeeder extends Seeder
             $end_hour = $faker->numberBetween($start_hour + 1, 18);
             $end_time = sprintf('%02d:00:00', $end_hour);
 
-            Course::create([
+            // Crea il corso
+            $course = Course::create([
                 'name' => $faker->sentence(3),
                 'description' => $faker->paragraph(3),
                 'date' => $date,
@@ -32,6 +34,10 @@ class CourseSeeder extends Seeder
                 'end_time' => $end_time,
                 'max_participants' => $faker->numberBetween(5, 30),
             ]);
+
+            // Assegna utenti casuali ai corsi
+            $users = User::inRandomOrder()->take(rand(5, $course->max_participants))->pluck('id');
+            $course->users()->attach($users);
         }
     }
 }
