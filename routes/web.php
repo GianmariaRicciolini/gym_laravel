@@ -19,11 +19,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/bookings', [ProfileController::class, 'bookings'])->name('profile.bookings');
 
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
     Route::post('/courses/{course}/book', [CourseController::class, 'book'])->name('courses.book');
-    Route::post('/courses/{course}/cancel', [CourseController::class, 'cancel'])->name('courses.cancel');
+    Route::delete('/courses/{course}/cancel', [CourseController::class, 'cancel'])->name('courses.cancel');
 });
 
 require __DIR__.'/auth.php';

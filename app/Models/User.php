@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -43,10 +44,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * The courses that belong to the user.
+     * Get the courses that the user is enrolled in.
      */
     public function courses(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class);
+        return $this->belongsToMany(Course::class, 'course_user');
     }
 }

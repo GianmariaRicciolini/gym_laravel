@@ -57,4 +57,13 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+    
+    public function bookings(Request $request)
+    {
+        $user = Auth::user();
+        $bookings = $user->courses()->with('users')->get();
+
+        return view('profile.bookings', compact('bookings'));
+    }
+
 }

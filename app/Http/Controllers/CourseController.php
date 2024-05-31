@@ -22,74 +22,50 @@ class CourseController extends Controller
     }
 
 
-    public function create()
-    {
-        return view('courses.create');
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'date' => 'required|date',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i',
-            'max_participants' => 'required|integer',
-        ]);
-
-        Course::create($request->all());
-
-        return redirect()->route('courses.index')->with('success', 'Course created successfully!');
-    }
-
-
     public function show(Course $course)
     {
         return view('courses.show', compact('course'));
     }
 
-    public function edit(Course $course)
-    {
-        return view('courses.edit', compact('course'));
-    }
-
-    public function update(Request $request, Course $course)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'date' => 'required|date',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i',
-            'max_participants' => 'required|integer',
-        ]);
-
-        $course->update($request->all());
-
-        return redirect()->route('courses.index')->with('success', 'Course updated successfully!');
-    }
-
-    public function destroy(Course $course)
-    {
-        $course->delete();
-
-        return redirect()->route('courses.index')->with('success', 'Course deleted successfully!');
-    }
-
     public function book(Request $request, Course $course)
     {
-        // Logica per prenotare il corso
-        // Esempio: $course->users()->attach($request->user());
+        // Controlla se l'utente è già iscritto
+        if ($course->users()->where('user_id', $request->user()->id)->exists()) {
+            return redirect()->route('profile.bookings')->with('error', 'You are already enrolled in this course.');
+        }
 
-        return redirect()->route('courses.index')->with('success', 'Course booked successfully!');
+        // Controlla se ci sono posti disponibili
+        if ($course->users()->count() >= $course->max_participants) {
+            return redirect()->route('profile.bookings')->with('error', 'This course is fully booked.');
+        }
+
+        // Iscrivi l'utente al corso
+        $course->users()->attach($request->user());
+
+        // Determina la pagina di reindirizzamento
+        $redirectTo = $request->input('redirect_to') === route('profile.bookings') 
+                      ? route('profile.bookings') 
+                      : route('courses.index', ['date' => $request->input('date')]);
+
+        return redirect($redirectTo)->with('success', 'You have successfully booked the course!');
     }
 
     public function cancel(Request $request, Course $course)
     {
-        // Logica per cancellare la prenotazione del corso
-        // Esempio: $course->users()->detach($request->user());
+        // Controlla se l'utente è iscritto al corso
+        if (!$course->users()->where('user_id', $request->user()->id)->exists()) {
+            return redirect()->back()->with('error', 'You are not enrolled in this course.');
+        }
 
-        return redirect()->route('courses.index')->with('success', 'Course booking canceled successfully!');
+        // Rimuovi l'utente dal corso
+        $course->users()->detach($request->user());
+
+        // Determina la pagina di reindirizzamento
+        $redirectTo = $request->input('redirect_to') === route('profile.bookings') 
+                      ? route('profile.bookings') 
+                      : route('courses.index', ['date' => $request->input('date')]);
+
+        return redirect($redirectTo)->with('success', 'Your booking has been canceled successfully!');
     }
 }
+

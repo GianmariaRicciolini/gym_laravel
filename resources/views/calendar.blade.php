@@ -17,13 +17,16 @@
         @while ($currentDate->lte($endOfWeek))
             @for ($i = 0; $i < 7; $i++)
                 @php
-                    $courses = \App\Models\Course::whereDate('date', $currentDate->format('Y-m-d'))->get();
+                    $courses = \App\Models\Course::with('users')->whereDate('date', $currentDate->format('Y-m-d'))->get();
                     $courseCount = $courses->count();
+                    $isBooked = $courses->filter(function ($course) {
+                        return $course->users->contains(Auth::user());
+                    })->isNotEmpty();
                 @endphp
-                <div class="border border-gray-200 p-2 d-flex flex-column justify-content-between align-items-center {{ $currentDate->month != $date->month ? 'bg-gray-200 dark:bg-gray-700' : 'bg-transparent' }}" style="width: calc(100% / 7); height: 100px; position: relative;">
+                <div class="border border-gray-200 p-2 d-flex flex-column justify-content-between align-items-center {{ $currentDate->month != $date->month ? 'bg-gray-200 dark:bg-gray-700' : ($isBooked ? 'bg-info' : 'bg-transparent') }}" style="width: calc(100% / 7); height: 100px; position: relative;">
                     <div class="d-flex justify-content-between w-100">
                         <span class="font-weight-bold">{{ $currentDate->format('D') }}</span>
-                        <a href="{{ route('courses.index', ['date' => $currentDate->format('Y-m-d')]) }}" class="{{ $currentDate->isToday() ? 'text-danger' : '' }}">
+                        <a href="{{ route('courses.index', ['date' => $currentDate->format('Y-m-d')]) }}" class="{{ $currentDate->isToday() ? 'text-danger' : ($isBooked ? 'text-white' : '') }}">
                             {{ $currentDate->day }}
                         </a>
                     </div>
